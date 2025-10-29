@@ -53,39 +53,6 @@ const App: React.FC = () => {
     }
   };
 
-  const handleExportCSV = () => {
-    if (!results || results.length === 0) return;
-
-    const headers = ["licenceNumber", "licensee", "status", "expires"];
-
-    const rows = results.map((r) => [
-      r.licenceNumber ?? "",
-      r.licensee ?? "",
-      r.status ?? "",
-      r.expires ?? "",
-    ]);
-
-    const escapeCell = (val: unknown) => {
-      const s = String(val ?? "");
-      const escaped = s.replace(/"/g, '""');
-      return /[",\n]/.test(escaped) ? `"${escaped}"` : escaped;
-    };
-
-    const csv = [headers, ...rows]
-      .map((row) => row.map(escapeCell).join(","))
-      .join("\n");
-
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `license-results-${new Date().toISOString().slice(0, 10)}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  };
-
   const handleExportXLSX = () => {
     if (!results || results.length === 0) return;
 
